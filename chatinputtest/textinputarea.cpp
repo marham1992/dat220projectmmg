@@ -44,7 +44,7 @@ void TextInputArea::handleEvent(sf::Event & event, sf::RenderWindow & window)
         if(event.type==sf::Event::TextEntered)
         {
             char code=static_cast<char>(event.text.unicode);
-
+            //TODO: Test these on different OS's
             if(event.text.unicode==13)//enter
             {
 //            onEnter(inputString);

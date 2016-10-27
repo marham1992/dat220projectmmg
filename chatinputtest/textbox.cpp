@@ -23,9 +23,9 @@ TextBox::~TextBox(void)
 
 
 
-void TextBox::handleEvent(sf::Event & event)
+void TextBox::handleEvent(sf::Event & event,sf::RenderWindow & window)
 {
-    //TODO: write events
+    //TODO: write events. Possible mouseclicks if the window is to be clickable(open_games_list)
     /*if(event.type==sf::Event::TextEntered)
     {
         char code=static_cast<char>(event.text.unicode);
@@ -45,6 +45,7 @@ void TextBox::handleEvent(sf::Event & event)
                 inputString.pop_back();
         }
     }*/
+
 }
 
 void TextBox::push(const std::string & s)
@@ -55,6 +56,8 @@ void TextBox::push(const std::string & s)
         if(history.size()>historyLength)
             history.pop_back();
     }
+    //TODO: Get info from textinputarea or other sources(packets)
+
 }
 
 void TextBox::connectOnEnter(std::function<void(const std::string & s)> func)

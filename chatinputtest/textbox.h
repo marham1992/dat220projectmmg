@@ -39,7 +39,7 @@ public:
     void setCharColor(const sf::Color & color);
 
 
-    void handleEvent(sf::Event & event);
+    void handleEvent(sf::Event & event,sf::RenderWindow & window);
 
     void push(const std::string & s);
     void connectOnEnter(std::function<void(const std::string & s)> func);
