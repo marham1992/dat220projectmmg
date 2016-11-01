@@ -27,8 +27,8 @@ void Handler(sf::IpAddress& l_ip, const PortNumber& l_port, const PacketID& l_id
             sf::Packet p;
             StampPacket(PacketType::Message, p);
             p << message;
-            l_server->Broadcast(p, clientID); // excludes sender
-//            l_server->Broadcast(p, 55); // Does not exclude sender, just a random Id
+//            l_server->Broadcast(p, clientID); // excludes sender
+            l_server->Broadcast(p); // Does not exclude sender
         }
         else if ((PacketType)l_id == PacketType::JoinGroup){
             sf::Int32 sfInt32;
