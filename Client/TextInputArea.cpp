@@ -15,6 +15,8 @@ TextInputArea::TextInputArea(const sf::Vector2f pos, const float length_, const 
 
     text.setFont(font);
     text.setCharacterSize(charSize);
+    text.setOutlineColor(sf::Color::Black);
+    text.setColor(sf::Color::Black);
     text.setPosition(pos.x+thickness, pos.y+thickness);
 
 
@@ -115,4 +117,36 @@ void TextInputArea::setFillColor(const sf::Color & color)
 void TextInputArea::setCharColor(const sf::Color & color)
 {
     text.setColor(color);
+}
+
+bool TextInputArea::isActive(){
+    return active;
+}
+
+sf::FloatRect TextInputArea::GetBounds(){
+    return box2.getGlobalBounds();
+}
+
+void TextInputArea::HandleTextEntered(sf::Uint32 textEntered) {
+    char code = static_cast<char>(textEntered);
+    if(textEntered == 13){
+        //enter clicked
+    }
+    else if (code != '\b'){
+        inputString.push_back(code);
+    }
+    else if (code == '\b'){
+        if (inputString.size()>0)
+            inputString.pop_back();
+    }
+}
+
+void TextInputArea::Stop() {
+    active = false;
+    box2.setOutlineColor(sf::Color::White);
+}
+
+void TextInputArea::Activate() {
+    box2.setOutlineColor(sf::Color::Green);
+    active = true;
 }

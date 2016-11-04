@@ -6,6 +6,7 @@
 #include <deque>
 #include <string>
 #include "SFML/Graphics.hpp"
+#include "EventManager.h"
 #include <functional>
 
 namespace sf
@@ -39,6 +40,14 @@ public:
     void setFillColor(const sf::Color & color);
     void setCharColor(const sf::Color & color);
 
+    bool isActive();
+
+    sf::FloatRect GetBounds();
+
+    void Stop();
+
+    void Activate();
+
 
 
     void update();
@@ -49,6 +58,7 @@ public:
 
     void draw(sf::RenderWindow & window);
 
+    void HandleTextEntered(sf::Uint32 textEntered);
 };
 
 #endif

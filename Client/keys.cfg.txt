@@ -9,3 +9,4 @@ P1Move_Up 24:73
 P1Move_Down 24:74
 P2Move_Up 24:22
 P2Move_Down 24:18
+Text_Entered 4:0

@@ -3,6 +3,8 @@
 
 #include "BaseState.h"
 #include "EventManager.h"
+#include "ChatBox.h"
+#include "TextInputArea.h"
 
 class State_Intro : public BaseState{
 public:
@@ -11,6 +13,9 @@ public:
 
     void OnCreate();
     void OnDestroy();
+
+    void ActivateInput();
+    void DeactivateInput();
 
     void Activate();
     void Deactivate();
@@ -24,9 +29,15 @@ private:
     sf::Sprite m_introSprite;
     sf::Font m_font;
     sf::Text m_text;
+    TextInputArea* m_inputIP;
+
 
     // Keeps track of time spent in this state.
     float m_timePassed;
+
+    void MouseClick(EventDetails *);
+
+    void GetTextEntered(EventDetails *);
 };
 
 #endif
