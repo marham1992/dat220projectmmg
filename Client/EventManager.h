@@ -79,16 +79,7 @@ using CallbackContainer = std::unordered_map<std::string, std::function<void(Eve
 // so that we can have only one CallbackContainer per state in addition to only one callback function per name.
 enum class StateType;
 
-struct EnumClassHash
-{
-    template <typename T>
-    std::size_t operator()(T t) const
-    {
-        return static_cast<std::size_t>(t);
-    }
-};
-
-using Callbacks = std::unordered_map<StateType, CallbackContainer, EnumClassHash>;
+using Callbacks = std::unordered_map<StateType, CallbackContainer>;
 
 class EventManager{
 public:

@@ -15,7 +15,7 @@ using StateContainer = std::vector<std::pair<StateType, BaseState*>>;
 using TypeContainer = std::vector<StateType>;
 // State factory
 // "We're using an unordered map here in order to map a specific state type to a specific function that will generate that type."
-using StateFactory = std::unordered_map<StateType, std::function<BaseState*(void)>, EnumClassHash>;
+using StateFactory = std::unordered_map<StateType, std::function<BaseState*(void)>>;
 
 class StateManager{
 public:

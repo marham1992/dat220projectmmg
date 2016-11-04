@@ -65,9 +65,9 @@ void State_Intro::Draw(){
 
     // Telling the window to draw what we want.
     window->draw(m_introSprite);
-    m_inputIP->draw(*window);
     if(m_timePassed >= 5.0f){
         window->draw(m_text);
+        m_inputIP->draw(*window);
     }
 }
 
@@ -82,6 +82,7 @@ void State_Intro::Continue(EventDetails* l_details){
 
 void State_Intro::MouseClick(EventDetails * l_details) {
     sf::Vector2f mousePos(l_details->m_mouse.x,l_details->m_mouse.y);
+
     bool Active = m_inputIP->isActive();
     bool WithinArea = m_inputIP->GetBounds().contains(mousePos);
 

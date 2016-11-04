@@ -7,6 +7,7 @@
 #include <string>
 #include "SFML/Graphics.hpp"
 #include "EventManager.h"
+#include "SharedContext.h"
 #include <functional>
 
 namespace sf
@@ -32,6 +33,7 @@ private:
     std::string inputString;
 
     std::function<void(const std::string & s)> onEnter;
+
 public:
     TextInputArea(const sf::Vector2f pos,const float length, const float thickness, const int charSize, const sf::Font & font);
     ~TextInputArea();
@@ -51,7 +53,7 @@ public:
 
 
     void update();
-    void handleEvent(sf::Event & event,sf::RenderWindow & window);
+    void handleMouseClick(sf::Vector2f l_mousePos);
 
     void send(const std::string & s);
     void connectOnEnter(std::function<void(const std::string & s)> func);

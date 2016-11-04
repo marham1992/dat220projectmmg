@@ -1,4 +1,5 @@
 #include "EventManager.h"
+#include "Util.h"
 
 EventManager::EventManager()
         :m_currentState(StateType(0)), m_hasFocus(true)
@@ -144,7 +145,7 @@ void EventManager::LoadBindings(){
     bindings.open("keys.cfg.txt");
     if (!bindings.is_open()){ std::cout << "! Failed loading keys.cfg." << std::endl; return; }
     std::string line;
-    while (std::getline(bindings, line)){
+    while (safeGetline(bindings, line)){
         std::stringstream keystream(line);
         std::string callbackName;
         keystream >> callbackName;

@@ -19,9 +19,6 @@ TextInputArea::TextInputArea(const sf::Vector2f pos, const float length_, const 
     text.setColor(sf::Color::Black);
     text.setPosition(pos.x+thickness, pos.y+thickness);
 
-
-
-
 }
 
 TextInputArea::~TextInputArea(void)
@@ -31,52 +28,6 @@ TextInputArea::~TextInputArea(void)
 void TextInputArea::update()
 {
     text.setString(inputString);
-}
-/**
- * window needed for handling MousePos relative to the renderwindow
- *
- * @param event
- * @param window
- */
-void TextInputArea::handleEvent(sf::Event & event, sf::RenderWindow & window)
-{
-    if(active) // textentry is active
-    {
-        if(event.type==sf::Event::TextEntered)
-        {
-            char code=static_cast<char>(event.text.unicode);
-            //TODO: Test these on different OS's
-            if(event.text.unicode==13)//enter
-            {
-//            onEnter(inputString);
-                send(inputString);
-                inputString.clear();
-            }
-
-            else if(code!='\b')
-                inputString.push_back(code);
-            else if(code=='\b') // equals backspace
-            {
-                if(inputString.size()>0)
-                    inputString.pop_back();
-            }
-        }
-    }
-
-    if(event.type == sf::Event::MouseButtonPressed)
-    {
-
-        if(box2.getGlobalBounds().contains(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y))
-        {
-            active = true;
-            setOutlineColor(sf::Color::Green);
-        }
-        else
-        {
-            active = false;
-            setOutlineColor(sf::Color::Yellow);
-        }
-    }
 }
 
 void TextInputArea::send(const std::string & s) //sends information
