@@ -17,7 +17,6 @@ public:
     void Clear();
     void Render(sf::RenderWindow& l_wind);
 
-//    void GatherInput(sf::RenderWindow& l_wind); // Activates InputArea. (Call this when the area is clicked)
     void Stop(); // Deactivates InputArea. (Call this when something other than the area is clicked)
     void HandleTextEntered(sf::Uint32);
 
@@ -38,7 +37,6 @@ private:
     bool m_active;
 
     void Send();
-    void HandleEvent(sf::Event l_event);
 };
 
 

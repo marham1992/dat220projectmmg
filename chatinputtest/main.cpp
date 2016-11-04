@@ -56,7 +56,7 @@ int main()
     window.setVerticalSyncEnabled(true);
 
     sf::Font font;
-    if (!font.loadFromFile("/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf"))
+    if (!font.loadFromFile("LiberationSerif-Bold.ttf"))
     {
         std::cout << "error loading font" << std::endl;
     }

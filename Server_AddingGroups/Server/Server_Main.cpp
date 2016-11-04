@@ -5,7 +5,7 @@
 // Packet handler:
 // We'll provide a pointer to this function to our Server class --> The fingerprint/signature must match exactly.
 void Handler(sf::IpAddress& l_ip, const PortNumber& l_port, const PacketID& l_id, sf::Packet& l_packet, Server* l_server){
-    std::cout << "Handling packet from IP: " << l_ip << " Port: " << l_port << " PacketID: " << (int)l_id << std::endl;
+    std::cout << "Handling packet from: " << l_ip << ":" << l_port << " PacketID: " << (int)l_id << std::endl;
     ClientID clientID = l_server->GetClientID(l_ip, l_port);
     // If the client ID for the specified IP and port# exists:
     if (clientID >= 0){
@@ -46,7 +46,7 @@ void Handler(sf::IpAddress& l_ip, const PortNumber& l_port, const PacketID& l_id
         // If the client was not found we are only interested in Connect packets.
     else {
         if ((PacketType)l_id == PacketType::Connect){
-            std::cout << "Received Connect packet from a new client" << std::endl;
+            std::cout << "Received Connect packet from a new client: " << l_ip<<":"<<l_port << std::endl;
             ClientID id = l_server->AddClient(l_ip, l_port);
             sf::Packet packet;
             StampPacket(PacketType::Connect, packet);

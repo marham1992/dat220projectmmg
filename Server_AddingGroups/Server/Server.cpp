@@ -21,25 +21,31 @@ void Server::BindTimeoutHandler(void(*l_handler)(const ClientID&)){
     m_timeoutHandler = std::bind(l_handler, std::placeholders::_1);
 }
 
+/// Will write to console every time a packet is sent(Must be modified for and added to; both Send() methods and the Broadcast() to account for all packets):
+//std::cout << "Sent a packet to: "<< itr->second.m_clientIP<<":"<<itr->second.m_clientPORT<<"  With ClientID: "<< itr->first << std::endl;
+
 bool Server::Send(const ClientID& l_id, sf::Packet& l_packet){
     sf::Lock lock(m_mutex);
     auto itr = m_clients.find(l_id);
     if (itr == m_clients.end()){ return false; }
-    if (m_outgoing.send(l_packet, itr->second.m_clientIP, itr->second.m_clientPORT)
-        != sf::Socket::Done)
+    /// Three statements for sending packets. (1):Public IP + m_outgoing. (2):Local IP + m_outgoing. (3):Public IP + m_incoming.
+//    if (m_outgoing.send(l_packet, itr->second.m_clientIP, itr->second.m_clientPORT) != sf::Socket::Done) /// (1)
+//    if (m_outgoing.send(l_packet, itr->second.m_clientIP.getLocalAddress(), itr->second.m_clientPORT) != sf::Socket::Done) /// (2)
+    if (m_incoming.send(l_packet, itr->second.m_clientIP, itr->second.m_clientPORT) != sf::Socket::Done) /// (3)
     {
         std::cout << "Error sending a packet..." << std::endl;
         return false;
     }
     m_totalSent += l_packet.getDataSize();
-
-//    std::cout << "Sent a packet" << std::endl; // Will write to console every time a packet is sent
     return true;
 }
 
 // Overloaded version of the Send method that does not require a client (just IP and port#)
 bool Server::Send(sf::IpAddress& l_ip, const PortNumber& l_port, sf::Packet& l_packet){
-    if (m_outgoing.send(l_packet, l_ip, l_port) != sf::Socket::Done){ return false; }
+    /// Three statements for sending packets. (1):Public IP + m_outgoing. (2):Local IP + m_outgoing. (3):Public IP + m_incoming.
+//    if (m_outgoing.send(l_packet, l_ip, l_port) != sf::Socket::Done){ return false; } /// (1)
+//    if (m_outgoing.send(l_packet, l_ip.getLocalAddress(), l_port) != sf::Socket::Done){ return false; } /// (2)
+    if (m_incoming.send(l_packet, l_ip, l_port) != sf::Socket::Done){ return false; } /// (3)
     m_totalSent += l_packet.getDataSize();
     return true;
 }
@@ -51,7 +57,10 @@ void Server::Broadcast(sf::Packet& l_packet, const ClientID& l_ignore){
     for (auto &itr : m_clients)
     {
         if (itr.first != l_ignore){
-            if (m_outgoing.send(l_packet, itr.second.m_clientIP, itr.second.m_clientPORT)
+            /// Three statements for sending packets. (1):Public IP + m_outgoing. (2):Local IP + m_outgoing. (3):Public IP + m_incoming.
+//            if (m_outgoing.send(l_packet, itr.second.m_clientIP, itr.second.m_clientPORT) /// (1)
+//            if (m_outgoing.send(l_packet, itr.second.m_clientIP.getLocalAddress(), itr.second.m_clientPORT) /// (2)
+            if (m_incoming.send(l_packet, itr.second.m_clientIP, itr.second.m_clientPORT) /// (3)
                 != sf::Socket::Done)
             {
                 std::cout << "Error broadcasting a packet to client: "

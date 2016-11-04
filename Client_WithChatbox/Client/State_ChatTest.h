@@ -25,7 +25,6 @@ public:
     void Deactivate();
 
     void HandlePacket(const PacketID& l_id, sf::Packet& l_packet, Client* l_client);
-    void CommandProcess(Client* l_client);
 
     void CheckInputArea(EventDetails* l_details);
     void GetTextEntered(EventDetails* l_details);
@@ -37,6 +36,7 @@ private:
 
     void ActivateInput();
     void DeactivateInput();
+    void SetupTextbox_and_InputArea();
 };
 
 

@@ -47,32 +47,6 @@ void TextInputArea::Render(sf::RenderWindow& l_wind){
     }
 }
 
-//void TextInputArea::GatherInput(sf::RenderWindow& l_wind){
-//    std::cout << "TextInputArea::GatherInput has been called" << std::endl;
-//    m_active = true;
-//    m_backdrop.setOutlineColor(sf::Color::Red);
-//    sf::Event event;
-//
-//    while (m_active && l_wind.pollEvent(event)){
-//        std::cout << "TextInputArea::GatherInput while loop running" << std::endl;
-//        if(event.type==sf::Event::TextEntered)
-//            HandleEvent(event);
-//    }
-//}
-
-//void TextInputArea::HandleEvent(sf::Event l_event) {
-//    char code = static_cast<char>(l_event.text.unicode);
-//
-//    if (l_event.text.unicode == 13) // Enter clicked.
-//        Send();
-//    else if (code != '\b')
-//        m_inputString.push_back(code);
-//    else if(code == '\b') {
-//        if (m_inputString.size()>0)
-//            m_inputString.pop_back();
-//    }
-//}
-
 void TextInputArea::HandleTextEntered(sf::Uint32 textEntered){
     char code = static_cast<char>(textEntered);
 

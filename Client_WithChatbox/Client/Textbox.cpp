@@ -44,10 +44,9 @@ void Textbox::Render(sf::RenderWindow& l_wind){
         l_content.append(itr+"\n");
     }
 
+    l_wind.draw(m_backdrop);
     if(l_content != ""){
         m_content.setString(l_content);
-//        l_wind.draw(m_backdrop);
         l_wind.draw(m_content);
     }
-    l_wind.draw(m_backdrop);
 }

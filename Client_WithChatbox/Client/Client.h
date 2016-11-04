@@ -65,6 +65,9 @@ private:
     // This way, we can provide a common interface of thread synchronization to the outside code.
     sf::Thread m_listenThread;
     sf::Mutex m_mutex;
+
+    bool CheckForListenErrors(sf::Packet& l_packet, const sf::IpAddress& l_recvIP, PacketType& l_id);
+    void RespondToHeartbeat(sf::Packet& l_packet);
 };
 
 

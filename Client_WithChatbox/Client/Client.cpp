@@ -11,7 +11,7 @@ Client::~Client(){
 }
 
 bool Client::Connect(){
-    //TODO: Why is m_connected initally true?
+    //TODO: Why is m_connected initially true?
 //    if (m_connected){
 //        std::cout << "Client::Connect has been called. client.m_connected is true" << std::endl;
 //        return false;
@@ -39,6 +39,10 @@ bool Client::Connect(){
     while (timer.getElapsedTime().asMilliseconds() < CONNECT_TIMEOUT){
         sf::Socket::Status s = m_socket.receive(p, recvIP, recvPORT);
         if (s != sf::Socket::Done){ continue; }
+
+
+        std::cout << "Received packet from " << recvIP << ":" << recvPORT << std::endl;
+
         if (recvIP != m_serverIp){ continue; } // if wrong IP --> Skip iteration.
         PacketID id;
         if (!(p >> id)){ break; }                               // Does packet contain an ID? Else break.
@@ -91,37 +95,16 @@ void Client::Listen(){
                 break;
             }
         }
-        if (recvIP != m_serverIp){
-            // Ignore packets not sent from the server.
-            std::cout << "Invalid packet received: invalid origin." << std::endl;
-            continue;
-        }
-        PacketID p_id;
-        if (!(packet >> p_id)){
-            // Non-conventional packet.
-            std::cout << "Invalid packet received: unable to extract id." << std::endl;
-            continue;
-        }
-        PacketType id = (PacketType)p_id;
-        if (id < PacketType::Disconnect || id >= PacketType::OutOfBounds){
-            // Invalid packet type.
-            std::cout << "Invalid packet received: id is out of bounds." << std::endl;
+        PacketType id;
+        if (!CheckForListenErrors(packet, recvIP, id)){
             continue;
         }
 
-        if (id == PacketType::Heartbeat){ // Received a heartbeat, will attempt a response.
-            sf::Packet p;
-            StampPacket(PacketType::Heartbeat, p);
-            if (m_socket.send(p, m_serverIp, m_serverPort) != sf::Socket::Done){
-                std::cout << "Failed sending a heartbeat!" << std::endl;
-            }
-            sf::Int32 timestamp;
-            packet >> timestamp;
-            SetTime(sf::milliseconds(timestamp));
-            m_lastHeartbeat = m_serverTime;
+        if (id == PacketType::Heartbeat){
+            RespondToHeartbeat(packet);
         }
-            // If the packet ID is something else, it gets handled by a different class.
         else if(m_packetHandler){
+            // If the packet ID is something else, it gets handled by a different class.
             m_packetHandler((PacketID)id, packet, this);
         }
     }
@@ -186,4 +169,37 @@ void Client::Setup(void(*l_handler)(const PacketID&, sf::Packet&, Client*)){
 // To undo what Setup() does.
 void Client::UnregisterPacketHandler(){
     m_packetHandler = nullptr;
+}
+
+bool Client::CheckForListenErrors(sf::Packet& l_packet, const sf::IpAddress& l_recvIP, PacketType& l_id) {
+    if (l_recvIP != m_serverIp){
+        // Ignore packets not sent from the server.
+        std::cout << "Invalid packet received: invalid origin." << std::endl;
+        return false;
+    }
+    PacketID p_id;
+    if (!(l_packet >> p_id)){
+        // Non-conventional packet.
+        std::cout << "Invalid packet received: unable to extract id." << std::endl;
+        return false;
+    }
+    l_id = (PacketType)p_id;
+    if (l_id < PacketType::Disconnect || l_id >= PacketType::OutOfBounds){
+        // Invalid packet type.
+        std::cout << "Invalid packet received: id is out of bounds." << std::endl;
+        return false;
+    }
+    return true;
+}
+
+void Client::RespondToHeartbeat(sf::Packet& l_packet){
+    sf::Packet p;
+    StampPacket(PacketType::Heartbeat, p);
+    if (m_socket.send(p, m_serverIp, m_serverPort) != sf::Socket::Done){
+        std::cout << "Failed sending a heartbeat!" << std::endl;
+    }
+    sf::Int32 timestamp;
+    l_packet >> timestamp;
+    SetTime(sf::milliseconds(timestamp));
+    m_lastHeartbeat = m_serverTime;
 }

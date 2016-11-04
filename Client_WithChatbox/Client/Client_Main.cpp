@@ -5,7 +5,8 @@
 // Main loop of chat client.
 int main(int argc, char** argv){
 
-    // Program entry point.
+    /// Choose between using (1):server info from console and (2): Static server info.
+    // In the OnCreate method in State_ChatTest.cpp
     Game game;
     while(!game.GetWindow()->IsDone()){
         game.Update();
