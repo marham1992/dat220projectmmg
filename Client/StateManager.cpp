@@ -1,13 +1,13 @@
 #include "StateManager.h"
 #include "State_Intro.h"
-#include "State_MainMenu.h"
+#include "State_Lobby.h"
 
 StateManager::StateManager(SharedContext* l_shared)
         : m_shared(l_shared)
 {
     //Register states:
     RegisterState<State_Intro>(StateType::Intro);
-    RegisterState<State_MainMenu>(StateType::MainMenu);
+    RegisterState<State_Lobby>(StateType::Lobby);
 //    RegisterState<State_Game>(StateType::Game);
 //    RegisterState<State_GameVsAi>(StateType::GameVsAi);
 //    RegisterState<State_Paused>(StateType::Paused);

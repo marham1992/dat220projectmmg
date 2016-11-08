@@ -1,30 +1,35 @@
-#include "State_MainMenu.h"
+#include "State_Lobby.h"
 #include "StateManager.h"
 
-State_MainMenu::State_MainMenu(StateManager* l_stateManager)
-        : BaseState(l_stateManager){}
-
-State_MainMenu::~State_MainMenu(){}
-
-void State_MainMenu::OnCreate(){
+State_Lobby::State_Lobby(StateManager* l_stateManager)
+        : BaseState(l_stateManager){
     m_font.loadFromFile("arial.ttf");
+    m_chatBox = new ChatBox(sf::Vector2f(50,50), 200, 3,16, 10, m_font);
+    //ChatBox(const sf::Vector2f pos, const float length_, const float thickness_,
+    //const int charSize_, const std::size_t historyLength_, const sf::Font & font)
+}
+
+State_Lobby::~State_Lobby(){}
+
+void State_Lobby::OnCreate(){
+
     m_text.setFont(m_font);
-    m_text.setString(sf::String("MAIN MENU:"));
+    m_text.setString(sf::String("Lobby:"));
     m_text.setCharacterSize(18);
 
     sf::FloatRect textRect = m_text.getLocalBounds();
     m_text.setOrigin(textRect.left + textRect.width / 2.0f,
                      textRect.top + textRect.height / 2.0f);
 
-    m_text.setPosition(400,100);
+    m_text.setPosition(400,10);
 
     m_buttonSize = sf::Vector2f(300.0f,32.0f);
-    m_buttonPos = sf::Vector2f(400,200);
+    m_buttonPos = sf::Vector2f(m_stateMgr->GetContext()->m_wind->GetWindowSize().x-m_buttonSize.x,100);
     m_buttonPadding = 4; // 4px.
 
     std::string str[4];
-    str[0] = "TWO PLAYER";
-    str[1] = "VS AI";
+    str[0] = "Join Game";
+    str[1] = "Create New Game";
     str[2] = "CREDITS";
     str[3] = "EXIT";
 
@@ -49,15 +54,15 @@ void State_MainMenu::OnCreate(){
     }
 
     EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
-    evMgr->AddCallback(StateType::MainMenu,"Mouse_Left",&State_MainMenu::MouseClick,this);
+    evMgr->AddCallback(StateType::Lobby,"Mouse_Left",&State_Lobby::MouseClick,this);
 }
 
-void State_MainMenu::OnDestroy(){
+void State_Lobby::OnDestroy(){
     EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
-    evMgr->RemoveCallback(StateType::MainMenu,"Mouse_Left");
+    evMgr->RemoveCallback(StateType::Lobby,"Mouse_Left");
 }
 
-void State_MainMenu::Activate(){
+void State_Lobby::Activate(){
     if((m_stateMgr->HasState(StateType::Game)) && (m_labels[0].getString() == "TWO PLAYER"))
     {
         m_labels[0].setString(sf::String("RESUME TWO PLAYER"));
@@ -74,7 +79,7 @@ void State_MainMenu::Activate(){
     }
 }
 
-void State_MainMenu::MouseClick(EventDetails* l_details){
+void State_Lobby::MouseClick(EventDetails* l_details){
     sf::Vector2i mousePos = l_details->m_mouse;
 
     float halfX = m_buttonSize.x / 2.0f;
@@ -98,14 +103,15 @@ void State_MainMenu::MouseClick(EventDetails* l_details){
     }
 }
 
-void State_MainMenu::Draw(){
+void State_Lobby::Draw(){
     sf::RenderWindow* window = m_stateMgr->GetContext()->m_wind->GetRenderWindow();
     window->draw(m_text);
     for(int i = 0; i < 4; ++i){
         window->draw(m_rects[i]);
         window->draw(m_labels[i]);
     }
+    m_chatBox->draw(*window);
 }
 
-void State_MainMenu::Update(const sf::Time& l_time){}
-void State_MainMenu::Deactivate(){}
+void State_Lobby::Update(const sf::Time& l_time){}
+void State_Lobby::Deactivate(){}

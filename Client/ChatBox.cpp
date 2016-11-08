@@ -24,7 +24,6 @@ ChatBox::ChatBox(const sf::Vector2f pos, const float length_, const float thickn
     historyText.setFont(font);
     historyText.setCharacterSize(charSize);
 
-
 }
 
 ChatBox::~ChatBox(void)

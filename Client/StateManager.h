@@ -7,7 +7,7 @@
 #include "BaseState.h"
 
 // Enumerating all possible states.
-enum class StateType{ Intro = 1, MainMenu, Game, GameVsAi, Paused, GameOver, Credits };
+enum class StateType{ Intro = 1, Lobby, Game, GameVsAi, Paused, GameOver, Credits };
 
 // State container.
 using StateContainer = std::vector<std::pair<StateType, BaseState*>>;

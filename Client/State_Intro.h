@@ -5,6 +5,7 @@
 #include "EventManager.h"
 #include "ChatBox.h"
 #include "TextInputArea.h"
+#include "Button.h"
 
 class State_Intro : public BaseState{
 public:
@@ -25,11 +26,12 @@ public:
 
     void Continue(EventDetails* l_details);
 private:
-    sf::Texture m_introTexture;
-    sf::Sprite m_introSprite;
     sf::Font m_font;
     sf::Text m_text;
     TextInputArea* m_inputIP;
+    TextInputArea* m_inputUsername;
+
+    Button* m_buttonOK;
 
 
     // Keeps track of time spent in this state.

@@ -41,6 +41,7 @@ public:
     void setOutlineColor(const sf::Color & color);
     void setFillColor(const sf::Color & color);
     void setCharColor(const sf::Color & color);
+    void setPosition(sf::Vector2f pos);
 
     bool isActive();
 

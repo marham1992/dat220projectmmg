@@ -6,6 +6,7 @@
 #include <deque>
 #include <string>
 #include "SFML/Graphics.hpp"
+#include "TextInputArea.h"
 #include <functional>
 
 namespace sf

@@ -3,11 +3,12 @@
 
 #include "BaseState.h"
 #include "EventManager.h"
+#include "ChatBox.h"
 
-class State_MainMenu : public BaseState{
+class State_Lobby : public BaseState{
 public:
-    State_MainMenu(StateManager* l_stateManager);
-    ~State_MainMenu();
+    State_Lobby(StateManager* l_stateManager);
+    ~State_Lobby();
 
     void OnCreate();
     void OnDestroy();
@@ -29,5 +30,7 @@ private:
 
     sf::RectangleShape m_rects[4];
     sf::Text m_labels[4];
+
+    ChatBox* m_chatBox;
 };
 #endif

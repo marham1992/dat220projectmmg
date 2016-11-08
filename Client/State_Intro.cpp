@@ -8,24 +8,21 @@ State_Intro::State_Intro(StateManager* l_stateManager)
     sf::Vector2u windowSize = m_stateMgr->GetContext()->m_wind->GetRenderWindow()->getSize();
     float inputareaWidth = 100;
     m_inputIP = new TextInputArea(sf::Vector2f( (windowSize.x / 2) - (inputareaWidth/2) , (windowSize.y / 2) + 50 ),inputareaWidth, 5, 15, m_font);
+    float buttonWidth = 100;
+    m_buttonOK = new Button("OK", sf::Vector2f( (windowSize.x / 2) , (windowSize.y / 2) + 100 ),buttonWidth, 15, m_font );
 }
 
 State_Intro::~State_Intro(){
     delete m_inputIP;
     m_inputIP = nullptr;
+    delete m_buttonOK;
+    m_buttonOK = nullptr;
 }
 
 void State_Intro::OnCreate(){
     m_timePassed = 0.0f;
 
     sf::Vector2u windowSize = m_stateMgr->GetContext()->m_wind->GetRenderWindow()->getSize();
-
-    m_introTexture.loadFromFile("intro.png");
-    m_introSprite.setTexture(m_introTexture);
-    m_introSprite.setOrigin(m_introTexture.getSize().x / 2.0f,
-                            m_introTexture.getSize().y / 2.0f);
-
-    m_introSprite.setPosition(windowSize.x / 2.0f, 0);
 
     // ****** FONT FILE HERE *****
     m_font.loadFromFile("arial.ttf");
@@ -40,41 +37,34 @@ void State_Intro::OnCreate(){
 
 
     EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
-    evMgr->AddCallback(StateType::Intro,"Intro_Continue",&State_Intro::Continue,this);
     evMgr->AddCallback(StateType::Intro,"Mouse_Left",&State_Intro::MouseClick,this);
 }
 
 void State_Intro::OnDestroy(){
     EventManager* evMgr = m_stateMgr->GetContext()->m_eventManager;
-    evMgr->RemoveCallback(StateType::Intro,"Intro_Continue");
+    evMgr->RemoveCallback(StateType::Intro,"Mouse_Left");
 }
 
 // Because we're dealing with time and movement here, updating the state is necessary.
 void State_Intro::Update(const sf::Time& l_time){
-    if(m_timePassed < 5.0f){ // Less than five seconds.
-        m_timePassed += l_time.asSeconds();
-        m_introSprite.setPosition(
-                m_introSprite.getPosition().x,
-                m_introSprite.getPosition().y + (48 * l_time.asSeconds()));
-    }
     m_inputIP->update();
+    m_buttonOK->update();
 }
 
 void State_Intro::Draw(){
     sf::RenderWindow* window = m_stateMgr->GetContext()->m_wind->GetRenderWindow();
 
     // Telling the window to draw what we want.
-    window->draw(m_introSprite);
-    if(m_timePassed >= 5.0f){
-        window->draw(m_text);
-        m_inputIP->draw(*window);
-    }
+    window->draw(m_text);
+    m_inputIP->draw(*window);
+    m_buttonOK->draw(*window);
+
 }
 
 void State_Intro::Continue(EventDetails* l_details){
     // Changed time req to small number, from 5.
     if(m_timePassed >= 0.5f){
-        m_stateMgr->SwitchTo(StateType::MainMenu);
+        m_stateMgr->SwitchTo(StateType::Lobby);
         // Removes 'itself' from the stack since we will not need the intro state again.
         m_stateMgr->Remove(StateType::Intro);
     }
@@ -92,6 +82,14 @@ void State_Intro::MouseClick(EventDetails * l_details) {
     else if (WithinArea && Active){
         DeactivateInput();
     }
+
+    if (m_buttonOK->GetBounds().contains(mousePos)){
+        //OK button pressed, send info to server and wait for reply. Simply going to next state for now for programflow demo.
+        m_stateMgr->SwitchTo(StateType::Lobby);
+
+        m_stateMgr->Remove(StateType::Intro);
+    }
+
 }
 
 void State_Intro::Activate(){}

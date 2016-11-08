@@ -50,8 +50,6 @@ void TextInputArea::draw(sf::RenderWindow & window)
 {
     window.draw(box2);
     window.draw(text);
-
-
 }
 
 
@@ -100,4 +98,9 @@ void TextInputArea::Stop() {
 void TextInputArea::Activate() {
     box2.setOutlineColor(sf::Color::Green);
     active = true;
+}
+
+void TextInputArea::setPosition(sf::Vector2f pos){
+    box2.setPosition(pos);
+    text.setPosition(pos.x+thickness, pos.y+thickness);
 }
